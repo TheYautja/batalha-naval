@@ -1,8 +1,16 @@
 import 'package:flame/components.dart';
-import 'package:flame/sprite.dart';
+import 'package:flame/events.dart';
 import 'dart:ui';
 
-class Cell extends PositionComponent {
+enum CellState {
+  water,
+  ship,
+  hit,
+  miss
+};
+
+class Cell extends PositionComponent with TapCallbacks{
+  //inherit from SpriteGroupComponent<CellState>
 
   final int cellX;
   final int cellY;
@@ -24,6 +32,12 @@ class Cell extends PositionComponent {
   void render(Canvas canvas){
     super.render(canvas);
     texture.render(canvas, size: size);
+  }
+
+
+  @override
+  void onTapDown(TapDownEvent event){
+    discovered = true;
   }
 
 

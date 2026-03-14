@@ -1,17 +1,22 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
-import 'Cell.dart';
+import 'package:flame/events.dart';
 
-class Battleship extends FlameGame {
+import 'cell.dart';
 
-  int gridWidth = 16;
-  int gridHeight = 16;
+class Battleship extends FlameGame with TapCallbacks{
+
+  double gridWidth = 16;
+  double gridHeight = 16;
+
+  late Sprite waterCenter;
+  late Sprite waterBottom;
 
   List<List<Cell>> grid = [];
 
-  Battleship(int gridWidth, int gridHeight){
+
+  Battleship(double gridWidth, double gridHeight){
     this.gridWidth = gridWidth;
     this.gridHeight = gridHeight;
   }
@@ -20,6 +25,8 @@ class Battleship extends FlameGame {
   @override
   Future<void> onLoad() async {
     await load_sprites();
+    waterCenter = get_sheet_frag(0, 0, 32, 32);
+    waterBottom = get_sheet_frag(0, 0, 32, 32);
     generate_grid();
   }
 
@@ -39,10 +46,19 @@ class Battleship extends FlameGame {
 
 
   void generate_grid(){
+
+    const double cellsize = 32.0;
+    double totalWidth = cellsize * gridWidth;
+    double totalHeight = cellsize * gridHeight;
+
+    double startX = (size.x - totalWidth) / 2;
+    double startY = (size.y - totalHeight) / 2;
+
     for(int i = 0; i < gridWidth; i++){
       List<Cell> row = [];
       for(int j = 0; j < gridHeight; j++){
-        final cell = Cell(i, j, false, get_sheet_frag(70.0, 30.0, 32.0, 32.0));
+        final cell = Cell(i, j, false, waterCenter);
+        cell.position =Vector2(startX + i * cellsize, startY + j * cellsize);
         row.add(cell);
         add(cell);
       }
