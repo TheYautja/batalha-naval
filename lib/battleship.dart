@@ -27,32 +27,27 @@ class Battleship extends FlameGame with TapCallbacks{
     await load_sprites();
     waterCenter = get_sheet_frag(0, 0, 32, 32);
     waterBottom = get_sheet_frag(0, 0, 32, 32);
-    generate_grid();
+    generate_grid(40.0, 0.0, 0.0);
+    generate_grid(40.0, 200.0, 50.0);
   }
 
 
   Future<void> load_sprites() async {
     await Flame.images.load('water.png');
+    await Flame.images.load('watertile.png');
   }
 
 
   Sprite get_sheet_frag(double x, double y, double width, double height){
     return Sprite(
-      Flame.images.fromCache('water.png'),
+      Flame.images.fromCache('watertile.png'),
       srcPosition: Vector2(x, y),
       srcSize: Vector2(width, height),
     );
   }
 
 
-  void generate_grid(){
-
-    const double cellsize = 32.0;
-    double totalWidth = cellsize * gridWidth;
-    double totalHeight = cellsize * gridHeight;
-
-    double startX = (size.x - totalWidth) / 2;
-    double startY = (size.y - totalHeight) / 2;
+  void generate_grid(double cellsize, double startX, double startY){
 
     for(int i = 0; i < gridWidth; i++){
       List<Cell> row = [];

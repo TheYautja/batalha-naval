@@ -6,11 +6,10 @@ enum CellState {
   water,
   ship,
   hit,
-  miss
-};
+  miss,
+}
 
 class Cell extends PositionComponent with TapCallbacks{
-  //inherit from SpriteGroupComponent<CellState>
 
   final int cellX;
   final int cellY;
@@ -19,7 +18,7 @@ class Cell extends PositionComponent with TapCallbacks{
   final Sprite texture;
 
 
-  static const double tilesize = 32.0;
+  static const double tilesize = 40.0;
 
 
   Cell(this.cellX, this.cellY, this.isShip, this.texture){
