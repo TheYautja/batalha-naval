@@ -11,9 +11,9 @@ class Battleship extends FlameGame with TapCallbacks{
   double gridHeight = 16;
 
   late Sprite waterCenter;
-  late Sprite waterBottom;
 
   List<List<Cell>> grid = [];
+  List<List<Cell>> enemyGrid = [];
 
 
   Battleship(double gridWidth, double gridHeight){
@@ -25,29 +25,37 @@ class Battleship extends FlameGame with TapCallbacks{
   @override
   Future<void> onLoad() async {
     await load_sprites();
-    waterCenter = get_sheet_frag(0, 0, 32, 32);
-    waterBottom = get_sheet_frag(0, 0, 32, 32);
-    generate_grid(40.0, 0.0, 0.0);
-    generate_grid(40.0, 200.0, 50.0);
+    waterCenter = get_sheet_frag(0, 0, 32, 32, "watertile.png");
+    generate_grid(grid, 40.0, 0, 0);
+    generate_grid(enemyGrid, 40.0, 650, 0);
+    place_ship(10, 4);
   }
 
 
   Future<void> load_sprites() async {
-    await Flame.images.load('water.png');
     await Flame.images.load('watertile.png');
+    await Flame.images.load('ship.png');
+    await Flame.images.load('miss.png');
   }
 
 
-  Sprite get_sheet_frag(double x, double y, double width, double height){
+  Sprite get_sheet_frag(double x, double y, double width, double height, String file){
     return Sprite(
-      Flame.images.fromCache('watertile.png'),
+      Flame.images.fromCache(file),
       srcPosition: Vector2(x, y),
       srcSize: Vector2(width, height),
     );
   }
 
 
-  void generate_grid(double cellsize, double startX, double startY){
+  void place_ship(int x, int y){
+      grid[x][y - 1].set_ship();
+      grid[x][y].set_ship();
+      grid[x][y + 1].set_ship();
+  }
+
+
+  void generate_grid(List<List<Cell>> target, double cellsize, double startX, double startY){
 
     for(int i = 0; i < gridWidth; i++){
       List<Cell> row = [];
@@ -57,9 +65,16 @@ class Battleship extends FlameGame with TapCallbacks{
         row.add(cell);
         add(cell);
       }
-      grid.add(row);
+      target.add(row);
     }
   }
 
 
 }
+
+
+
+
+
+
+

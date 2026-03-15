@@ -2,6 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'dart:ui';
 
+import 'battleship.dart';
+
 enum CellState {
   water,
   ship,
@@ -9,13 +11,13 @@ enum CellState {
   miss,
 }
 
-class Cell extends PositionComponent with TapCallbacks{
+class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship>{
 
   final int cellX;
   final int cellY;
   bool isShip = false;
   bool discovered = false;
-  final Sprite texture;
+  Sprite texture;
 
 
   static const double tilesize = 40.0;
@@ -27,10 +29,38 @@ class Cell extends PositionComponent with TapCallbacks{
   }
 
 
+  void set_texture(Sprite newTexture){
+    this.texture = newTexture;
+  }
+
+
+  void set_ship(){
+    this.isShip = true;
+  }
+
+
+  void set_discovered(){
+    this.discovered = true;
+  }
+
+
   @override
-  void render(Canvas canvas){
-    super.render(canvas);
-    texture.render(canvas, size: size);
+  Future<void>? onLoad() async {
+
+    final startingSprite = await gameRef.loadSprite("watertile.png");
+    final missSprite = await gameRef.loadSprite("miss.png");
+    final shipSprite = await gameRef.loadSprite("ship.png");
+    final hitSprite = await gameRef.loadSprite("hit.png");
+
+    sprites = {
+      CellState.water: startingSprite,
+      CellState.miss: missSprite,
+      CellState.ship: shipSprite,
+      CellState.hit: hitSprite
+    };
+
+    current = CellState.water;
+
   }
 
 
