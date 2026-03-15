@@ -17,20 +17,18 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
   final int cellY;
   bool isShip = false;
   bool discovered = false;
-  Sprite texture;
+  bool isEnemy = false;
 
+  late Sprite startingSprite;
+  late Sprite missSprite;
+  late Sprite shipSprite;
+  late Sprite hitSprite;
 
   static const double tilesize = 40.0;
 
 
-  Cell(this.cellX, this.cellY, this.isShip, this.texture){
-    position = Vector2(cellX * tilesize, cellY * tilesize);
+  Cell(this.cellX, this.cellY, this.isShip, this.isEnemy){
     size = Vector2.all(tilesize);
-  }
-
-
-  void set_texture(Sprite newTexture){
-    this.texture = newTexture;
   }
 
 
@@ -44,13 +42,20 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
   }
 
 
+  Future<void> load_sprites() async {
+
+    startingSprite = await gameRef.loadSprite("watertile.png");
+    missSprite = await gameRef.loadSprite("miss.png");
+    shipSprite = await gameRef.loadSprite("ship.png");
+    hitSprite = await gameRef.loadSprite("hit.png");
+
+  }
+
+
   @override
   Future<void>? onLoad() async {
 
-    final startingSprite = await gameRef.loadSprite("watertile.png");
-    final missSprite = await gameRef.loadSprite("miss.png");
-    final shipSprite = await gameRef.loadSprite("ship.png");
-    final hitSprite = await gameRef.loadSprite("hit.png");
+    await load_sprites();
 
     sprites = {
       CellState.water: startingSprite,
@@ -59,14 +64,33 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
       CellState.hit: hitSprite
     };
 
-    current = CellState.water;
+    if(!isEnemy){
+      if(isShip){
+        current = CellState.ship;
+      } else {
+        current = CellState.water;
+      }
+    } else {
+      current = CellState.water;
+    }
+
 
   }
 
 
   @override
   void onTapDown(TapDownEvent event){
-    discovered = true;
+
+    if(discovered)return;
+
+    if(!isShip){
+      discovered = true;
+      current = CellState.miss;
+    } else if(isShip){
+      discovered = true;
+      current = CellState.hit;
+    }
+
   }
 
 

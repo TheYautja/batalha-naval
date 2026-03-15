@@ -1,7 +1,9 @@
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/events.dart';
+import 'dart:ui';
 
 import 'cell.dart';
 
@@ -10,7 +12,10 @@ class Battleship extends FlameGame with TapCallbacks{
   double gridWidth = 16;
   double gridHeight = 16;
 
-  late Sprite waterCenter;
+  double tilesize = 40.0;
+
+  late double menuStart;
+  late double menuWidth;
 
   List<List<Cell>> grid = [];
   List<List<Cell>> enemyGrid = [];
@@ -24,10 +29,24 @@ class Battleship extends FlameGame with TapCallbacks{
 
   @override
   Future<void> onLoad() async {
+
+    menuStart = tilesize * gridWidth;
+    menuWidth = menuStart / 3;
+
+    camera.viewport = FixedResolutionViewport(
+      resolution: Vector2(menuStart * 2 + menuWidth, tilesize * gridHeight),
+    );
+
     await load_sprites();
-    waterCenter = get_sheet_frag(0, 0, 32, 32, "watertile.png");
-    generate_grid(grid, 40.0, 0, 0);
-    generate_grid(enemyGrid, 40.0, 650, 0);
+
+    add(RectangleComponent(
+      position: Vector2(menuStart, 0),
+      size: Vector2(menuWidth, tilesize * gridHeight),
+      paint: Paint()..color = const Color(0x88000000),
+    ));
+
+    generate_grid(grid, tilesize, 0, 0);
+    generate_grid(enemyGrid, tilesize, menuStart + menuWidth, 0);
     place_ship(10, 4);
   }
 
@@ -36,6 +55,7 @@ class Battleship extends FlameGame with TapCallbacks{
     await Flame.images.load('watertile.png');
     await Flame.images.load('ship.png');
     await Flame.images.load('miss.png');
+    await Flame.images.load('hit.png');
   }
 
 
@@ -60,7 +80,8 @@ class Battleship extends FlameGame with TapCallbacks{
     for(int i = 0; i < gridWidth; i++){
       List<Cell> row = [];
       for(int j = 0; j < gridHeight; j++){
-        final cell = Cell(i, j, false, waterCenter);
+        bool enemy = (target == enemyGrid) ? true : false;
+        final cell = Cell(i, j, false, enemy);
         cell.position =Vector2(startX + i * cellsize, startY + j * cellsize);
         row.add(cell);
         add(cell);
