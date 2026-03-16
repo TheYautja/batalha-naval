@@ -9,6 +9,7 @@ enum CellState {
   ship,
   hit,
   miss,
+  enemyHit,
 }
 
 class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship>{
@@ -23,6 +24,7 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
   late Sprite missSprite;
   late Sprite shipSprite;
   late Sprite hitSprite;
+  late Sprite enemyHitSprite;
 
   static const double tilesize = 40.0;
 
@@ -37,17 +39,13 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
   }
 
 
-  void set_discovered(){
-    this.discovered = true;
-  }
-
-
   Future<void> load_sprites() async {
 
     startingSprite = await gameRef.loadSprite("watertile.png");
     missSprite = await gameRef.loadSprite("miss.png");
     shipSprite = await gameRef.loadSprite("ship.png");
     hitSprite = await gameRef.loadSprite("hit.png");
+    enemyHitSprite = await gameRef.loadSprite("enemyHit.png");
 
   }
 
@@ -61,7 +59,8 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
       CellState.water: startingSprite,
       CellState.miss: missSprite,
       CellState.ship: shipSprite,
-      CellState.hit: hitSprite
+      CellState.hit: hitSprite,
+      CellState.enemyHit: enemyHitSprite
     };
 
     if(!isEnemy){
@@ -87,8 +86,14 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
       discovered = true;
       current = CellState.miss;
     } else if(isShip){
-      discovered = true;
-      current = CellState.hit;
+      if(isEnemy){
+        discovered = true;
+        current = CellState.hit;
+      } else {
+        discovered = true;
+        current = CellState.enemyHit;
+      }
+
     }
 
   }

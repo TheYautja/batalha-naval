@@ -26,4 +26,5 @@ flutter:
     - assets/images/ship.png
     - assets/images/miss.png
     - assets/images/hit.png
+    - assets/images/enemyHit.png
 

@@ -47,7 +47,8 @@ class Battleship extends FlameGame with TapCallbacks{
 
     generate_grid(grid, tilesize, 0, 0);
     generate_grid(enemyGrid, tilesize, menuStart + menuWidth, 0);
-    place_ship(10, 4);
+    place_ship(grid, 10, 4);
+    place_ship(enemyGrid, 4, 4);
   }
 
 
@@ -68,10 +69,10 @@ class Battleship extends FlameGame with TapCallbacks{
   }
 
 
-  void place_ship(int x, int y){
-      grid[x][y - 1].set_ship();
-      grid[x][y].set_ship();
-      grid[x][y + 1].set_ship();
+  void place_ship(List<List<Cell>> target, int x, int y){
+      target[x][y - 1].set_ship();
+      target[x][y].set_ship();
+      target[x][y + 1].set_ship();
   }
 
 
