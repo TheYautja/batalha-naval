@@ -9,7 +9,7 @@ import 'cell.dart';
 
 class Battleship extends FlameGame with TapCallbacks{
 
-  late final World world;
+  //late final World world;
 
   int playerScore = 0;
   int enemyScore = 0;
@@ -39,20 +39,20 @@ class Battleship extends FlameGame with TapCallbacks{
 
   overlays.add('placar');
 
-  final worldWidth = tilesize * gridWidth * 2 + menuWidth;
-  final worldHeight = tilesize * gridHeight;
+  //final worldWidth = tilesize * gridWidth * 2 + menuWidth;
+  //final worldHeight = tilesize * gridHeight;
 
-  world = World();
-  add(world);
+  //world = World();
+  //add(world);
 
-  camera = CameraComponent.withFixedResolution(
-    world: world,
-    width: worldWidth,
-    height: worldHeight,
-  );
+  //camera = CameraComponent.withFixedResolution(
+    //world: world,
+    //width: worldWidth,
+    //height: worldHeight,
+  //);
 
-  camera.viewfinder.anchor = Anchor.topLeft;
-  add(camera);
+  //camera.viewfinder.anchor = Anchor.topLeft;
+  //add(camera);
 
   //final scaleX = size.x / worldWidth;
   //final scaleY = size.y / worldHeight;
@@ -63,7 +63,7 @@ class Battleship extends FlameGame with TapCallbacks{
 
 
     generate_grid(grid, tilesize, 0, 0);
-    generate_grid(enemyGrid, tilesize, 765, 0);
+    generate_grid(enemyGrid, tilesize, 745, 0);
 
     place_ship(grid, 10, 4);
     place_ship(enemyGrid, 4, 4);
@@ -112,7 +112,7 @@ class Battleship extends FlameGame with TapCallbacks{
         final cell = Cell(i, j, false, enemy);
         cell.position =Vector2(startX + i * cellsize, startY + j * cellsize);
         row.add(cell);
-        world.add(cell);
+        add(cell);
       }
       target.add(row);
     }

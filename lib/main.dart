@@ -13,10 +13,10 @@ void main() {
   if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
     setWindowTitle('Battleship');
 
-   // const size = Size(1000, 600);
+    const size = Size(1385, 600);
 
-   // setWindowMinSize(size);
-    //setWindowMaxSize(size);
+    setWindowMinSize(size);
+    setWindowMaxSize(size);
   }
 
   runApp(
