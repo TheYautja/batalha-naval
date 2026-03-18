@@ -41,7 +41,7 @@ class _PlacarState extends State<Placar> {
       bottom: 0,
       width: 100,
       child: Container(
-        color: Colors.blue,
+        color: Color(0xFF788050),
         padding: const EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

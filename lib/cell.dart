@@ -79,27 +79,24 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
 
 
   @override
-  void onTapDown(TapDownEvent event){
+  void onTapDown(TapDownEvent event) {
 
-    if(discovered)return;
+  if (discovered) return;
+  if (!isEnemy) return;
 
-    if(!isShip){
-      discovered = true;
-      current = CellState.miss;
-    } else if(isShip){
-      if(isEnemy){
-        gameRef.addEnemyPoint();
-        discovered = true;
-        current = CellState.hit;
-      } else {
-        gameRef.addPlayerPoint();
-        discovered = true;
-        current = CellState.enemyHit;
-      }
-
-    }
-
+  if (!isShip) {
+    discovered = true;
+    current = CellState.miss;
+  } else {
+    gameRef.addEnemyPoint();
+    discovered = true;
+    current = CellState.hit;
   }
+
+  Future.delayed(const Duration(milliseconds: 300), () {
+    gameRef.enemyTurn();
+  });
+}
 
 
 }

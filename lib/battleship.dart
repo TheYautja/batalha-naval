@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/events.dart';
+import 'dart:math';
 import 'dart:ui';
 
 import 'cell.dart';
@@ -10,6 +11,8 @@ import 'cell.dart';
 class Battleship extends FlameGame with TapCallbacks{
 
   //late final World world;
+
+  final Random random = Random();
 
   int playerScore = 0;
   int enemyScore = 0;
@@ -65,8 +68,33 @@ class Battleship extends FlameGame with TapCallbacks{
     generate_grid(grid, tilesize, 0, 0);
     generate_grid(enemyGrid, tilesize, 745, 0);
 
-    place_ship(grid, 10, 4);
-    place_ship(enemyGrid, 4, 4);
+    place_ship_horizontal(grid, 10, 4);
+    place_ship_vertical(grid, 15, 9);
+    place_ship_horizontal(grid, 2, 10);
+
+    place_ship_horizontal(enemyGrid, 8, 2);
+    place_ship_vertical(enemyGrid, 7, 9);
+    place_ship_horizontal(enemyGrid, 2, 10);
+  }
+
+
+  void enemyTurn() {
+  Cell cell;
+
+  do {
+    int x = random.nextInt(gridWidth.toInt());
+    int y = random.nextInt(gridHeight.toInt());
+    cell = grid[x][y];
+  } while (cell.discovered);
+
+  if (!cell.isShip) {
+      cell.discovered = true;
+      cell.current = CellState.miss;
+  } else {
+      addPlayerPoint();
+      cell.discovered = true;
+      cell.current = CellState.enemyHit;
+    }
   }
 
 
@@ -96,10 +124,17 @@ class Battleship extends FlameGame with TapCallbacks{
   }
 
 
-  void place_ship(List<List<Cell>> target, int x, int y){
+  void place_ship_vertical(List<List<Cell>> target, int x, int y){
       target[x][y - 1].set_ship();
       target[x][y].set_ship();
       target[x][y + 1].set_ship();
+  }
+
+
+  void place_ship_horizontal(List<List<Cell>> target, int x, int y){
+      target[x - 1][y].set_ship();
+      target[x][y].set_ship();
+      target[x + 1][y].set_ship();
   }
 
 
