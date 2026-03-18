@@ -54,16 +54,16 @@ class Battleship extends FlameGame with TapCallbacks{
   camera.viewfinder.anchor = Anchor.topLeft;
   add(camera);
 
-  final scaleX = size.x / worldWidth;
-  final scaleY = size.y / worldHeight;
-  camera.viewfinder.zoom = scaleX < scaleY ? scaleX : scaleY;
+  //final scaleX = size.x / worldWidth;
+  //final scaleY = size.y / worldHeight;
+  //camera.viewfinder.zoom = scaleX < scaleY ? scaleX : scaleY;
 
   await load_sprites();
 
 
 
     generate_grid(grid, tilesize, 0, 0);
-    generate_grid(enemyGrid, tilesize, menuStart + menuWidth, 0);
+    generate_grid(enemyGrid, tilesize, 765, 0);
 
     place_ship(grid, 10, 4);
     place_ship(enemyGrid, 4, 4);

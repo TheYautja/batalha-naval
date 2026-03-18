@@ -37,8 +37,9 @@ class _PlacarState extends State<Placar> {
   Widget build(BuildContext context) {
     return Positioned(
       top: 0,
-      left: 550,
+      left: 552,
       bottom: 0,
+      width: 100,
       child: Container(
         color: Colors.blue,
         padding: const EdgeInsets.all(12),
