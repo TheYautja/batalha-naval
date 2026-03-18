@@ -14,6 +14,7 @@ class Placar extends StatefulWidget {
 }
 
 class _PlacarState extends State<Placar> {
+
   int playerScore = 0;
   int enemyScore = 0;
 
@@ -36,7 +37,7 @@ class _PlacarState extends State<Placar> {
   Widget build(BuildContext context) {
     return Positioned(
       top: 0,
-      left: widget.game.menuStart,
+      left: 550,
       bottom: 0,
       child: Container(
         color: Colors.blue,

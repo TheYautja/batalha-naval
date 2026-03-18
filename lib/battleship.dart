@@ -9,6 +9,8 @@ import 'cell.dart';
 
 class Battleship extends FlameGame with TapCallbacks{
 
+  late final World world;
+
   int playerScore = 0;
   int enemyScore = 0;
 
@@ -32,24 +34,33 @@ class Battleship extends FlameGame with TapCallbacks{
 
   @override
   Future<void> onLoad() async {
-    menuStart = tilesize * gridWidth;
-    menuWidth = menuStart / 3;
+  menuStart = tilesize * gridWidth;
+  menuWidth = menuStart / 3;
 
-    overlays.add('placar');
+  overlays.add('placar');
 
-    final worldWidth = tilesize * gridWidth * 2 + menuWidth;
-    final worldHeight = tilesize * gridHeight;
+  final worldWidth = tilesize * gridWidth * 2 + menuWidth;
+  final worldHeight = tilesize * gridHeight;
 
-    camera.viewport = MaxViewport(); // 🔥 BEST FIX
-    camera.viewfinder.anchor = Anchor.topLeft;
+  world = World();
+  add(world);
 
-    await load_sprites();
+  camera = CameraComponent.withFixedResolution(
+    world: world,
+    width: worldWidth,
+    height: worldHeight,
+  );
 
-    add(RectangleComponent(
-      position: Vector2(menuStart, 0),
-      size: Vector2(menuWidth, tilesize * gridHeight),
-      paint: Paint()..color = const Color(0x88000000),
-    ));
+  camera.viewfinder.anchor = Anchor.topLeft;
+  add(camera);
+
+  final scaleX = size.x / worldWidth;
+  final scaleY = size.y / worldHeight;
+  camera.viewfinder.zoom = scaleX < scaleY ? scaleX : scaleY;
+
+  await load_sprites();
+
+
 
     generate_grid(grid, tilesize, 0, 0);
     generate_grid(enemyGrid, tilesize, menuStart + menuWidth, 0);
@@ -101,7 +112,7 @@ class Battleship extends FlameGame with TapCallbacks{
         final cell = Cell(i, j, false, enemy);
         cell.position =Vector2(startX + i * cellsize, startY + j * cellsize);
         row.add(cell);
-        add(cell);
+        world.add(cell);
       }
       target.add(row);
     }
@@ -109,10 +120,3 @@ class Battleship extends FlameGame with TapCallbacks{
 
 
 }
-
-
-
-
-
-
-
