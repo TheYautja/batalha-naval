@@ -8,19 +8,19 @@ import 'battleship.dart';
 enum CellState {
   water,
   ship,
-  hit,
+  hit, //todas as possiblidades
   miss,
   enemyHit,
 }
 
-class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship> {
+class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship> { //puxa uma referencia pro jogo
 
   final int cellX;
   final int cellY;
   bool isShip = false;
   bool discovered = false;
   bool isEnemy = false;
-
+                                //
   late Sprite startingSprite;
   late Sprite missSprite;
   late Sprite shipSprite;
@@ -44,7 +44,7 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
 
     startingSprite = await gameRef.loadSprite("watertile.png");
     missSprite = await gameRef.loadSprite("miss.png");
-    shipSprite = await gameRef.loadSprite("ship.png");
+    shipSprite = await gameRef.loadSprite("ship.png");  //
     hitSprite = await gameRef.loadSprite("hit.png");
     enemyHitSprite = await gameRef.loadSprite("enemyHit.png");
 
@@ -52,7 +52,7 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
 
 
   @override
-  Future<void>? onLoad() async {
+  Future<void>? onLoad() async { //metodo padrao do flame
 
     await load_sprites();
 
@@ -81,6 +81,7 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
   @override
   void onTapDown(TapDownEvent event) {
 
+  if (gameRef.gameOver) return;
   if (discovered) return;
   if (!isEnemy) return;
 

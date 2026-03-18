@@ -12,6 +12,12 @@ class Battleship extends FlameGame with TapCallbacks{
 
   //late final World world;
 
+  int playerWins = 0;
+  int enemyWins = 0;
+
+  final int totalShipParts = 9;
+  bool gameOver = false;
+
   final Random random = Random();
 
   int playerScore = 0;
@@ -100,10 +106,63 @@ class Battleship extends FlameGame with TapCallbacks{
 
   void addPlayerPoint() {
     playerScore++;
+    checkWin();
   }
 
   void addEnemyPoint() {
     enemyScore++;
+    checkWin();
+  }
+
+
+  void resetGame() {
+    playerScore = 0;
+    enemyScore = 0;
+    gameOver = false;
+
+    for (var row in grid) {
+      for (var cell in row) {
+        cell.removeFromParent();
+      }
+    }
+
+    for (var row in enemyGrid) {
+      for (var cell in row) {
+        cell.removeFromParent();
+      }
+    }
+
+    grid.clear();
+    enemyGrid.clear();
+
+    generate_grid(grid, tilesize, 0, 0);
+    generate_grid(enemyGrid, tilesize, 745, 0);
+
+    place_ship_horizontal(grid, 10, 4);
+    place_ship_vertical(grid, 15, 9);
+    place_ship_horizontal(grid, 2, 10);
+
+    place_ship_horizontal(enemyGrid, 8, 2);
+    place_ship_vertical(enemyGrid, 7, 9);
+    place_ship_horizontal(enemyGrid, 2, 10);
+
+    overlays.remove('winMenu');
+  }
+
+
+  void checkWin() {
+    if (gameOver) return;
+
+    if (enemyScore >= totalShipParts) {
+      gameOver = true;
+      playerWins++;
+      overlays.add('winMenu');
+    }
+    else if (playerScore >= totalShipParts) {
+      gameOver = true;
+      enemyWins++;
+      overlays.add('winMenu');
+    }
   }
 
 

@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'dart:io';
 import 'package:window_size/window_size.dart';
 
+import 'winmenu.dart';
 import 'battleship.dart';
 import 'placar.dart';
 
@@ -25,7 +26,12 @@ void main() {
       overlayBuilderMap: {
         'placar': (context, game) {
           return Placar(game: game as Battleship);
-        }
+        },
+
+        'winMenu': (context, game) {
+          return WinMenu(game: game as Battleship);
+        },
+
       }
     ),
   );
