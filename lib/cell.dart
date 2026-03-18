@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'dart:ui';
 
+import 'placar.dart';
 import 'battleship.dart';
 
 enum CellState {
@@ -12,7 +13,7 @@ enum CellState {
   enemyHit,
 }
 
-class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship>{
+class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef<Battleship> {
 
   final int cellX;
   final int cellY;
@@ -87,9 +88,11 @@ class Cell extends SpriteGroupComponent<CellState> with TapCallbacks, HasGameRef
       current = CellState.miss;
     } else if(isShip){
       if(isEnemy){
+        gameRef.addEnemyPoint();
         discovered = true;
         current = CellState.hit;
       } else {
+        gameRef.addPlayerPoint();
         discovered = true;
         current = CellState.enemyHit;
       }

@@ -9,6 +9,9 @@ import 'cell.dart';
 
 class Battleship extends FlameGame with TapCallbacks{
 
+  int playerScore = 0;
+  int enemyScore = 0;
+
   double gridWidth = 16;
   double gridHeight = 16;
 
@@ -29,13 +32,16 @@ class Battleship extends FlameGame with TapCallbacks{
 
   @override
   Future<void> onLoad() async {
-
     menuStart = tilesize * gridWidth;
     menuWidth = menuStart / 3;
 
-    camera.viewport = FixedResolutionViewport(
-      resolution: Vector2(menuStart * 2 + menuWidth, tilesize * gridHeight),
-    );
+    overlays.add('placar');
+
+    final worldWidth = tilesize * gridWidth * 2 + menuWidth;
+    final worldHeight = tilesize * gridHeight;
+
+    camera.viewport = MaxViewport(); // 🔥 BEST FIX
+    camera.viewfinder.anchor = Anchor.topLeft;
 
     await load_sprites();
 
@@ -47,8 +53,18 @@ class Battleship extends FlameGame with TapCallbacks{
 
     generate_grid(grid, tilesize, 0, 0);
     generate_grid(enemyGrid, tilesize, menuStart + menuWidth, 0);
+
     place_ship(grid, 10, 4);
     place_ship(enemyGrid, 4, 4);
+  }
+
+
+  void addPlayerPoint() {
+    playerScore++;
+  }
+
+  void addEnemyPoint() {
+    enemyScore++;
   }
 
 
